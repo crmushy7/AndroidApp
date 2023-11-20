@@ -172,6 +172,8 @@ public class ServerHost extends Thread {
     private Context context;
     private PrintWriter out; // PrintWriter to send messages to the client
 
+
+
     public ServerHost(Context context) {
         this.context = context;
         handler = new Handler(Looper.getMainLooper());
