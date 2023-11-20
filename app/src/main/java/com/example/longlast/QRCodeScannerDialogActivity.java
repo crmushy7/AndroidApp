@@ -5,18 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,7 +21,7 @@ import java.net.Socket;
 public class QRCodeScannerDialogActivity extends AppCompatActivity {
 
     private IntentIntegrator integrator;
-    private TextView textViewReceivedText;
+    private EditText editTextForClientChatMessages;
     private EditText editTextUserInput;
     private Button buttonSend;
     private PrintWriter out;
@@ -37,7 +32,7 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
         setContentView(R.layout.popup_layout);
 
         // Initialize UI components
-        textViewReceivedText = findViewById(R.id.textViewReceivedText);
+        editTextForClientChatMessages = findViewById(R.id.editTextForClientChatMessages);
         editTextUserInput = findViewById(R.id.editTextUserInput);
         buttonSend = findViewById(R.id.buttonSend);
 
@@ -144,11 +139,10 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
         }).start();
     }
 
-
     private void showReceivedText(String receivedText) {
-        // Update the TextView to display received text
+        // Append the received message to the EditText
+        editTextForClientChatMessages.append("server: "+receivedText + "\n");
         Toast.makeText(this, receivedText, Toast.LENGTH_SHORT).show();
-        textViewReceivedText.setText("Received Text: " + receivedText);
     }
 
     private class SendTask extends AsyncTask<Void, Void, Void> {
@@ -164,16 +158,31 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             // Perform network operations in the background
-            if (out != null) {
-                // Send the message to the server using the PrintWriter
-                out.println(message);
+            try {
+                if (out != null) {
+                    // Send the message to the server using the PrintWriter
+                    out.println("Client: " + message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            // Handle any post-execution tasks if needed
+            // This method runs on the main thread, so you can safely update the UI here
+            showSentMessageToast();
+        }
+
+        private void showSentMessageToast() {
+            runOnUiThread(() -> {
+                Toast.makeText(QRCodeScannerDialogActivity.this, "Message sent successfully", Toast.LENGTH_SHORT).show();
+                // Append the sent message to the EditText
+                editTextForClientChatMessages.append("You: " + message + "\n");
+                editTextUserInput.setText("");
+            });
         }
     }
+
 }

@@ -9,7 +9,9 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,9 +94,24 @@ public class Homepage extends AppCompatActivity {
     }
 
     public void onServerStart() {
+        // Initialize the serverHost object
         serverHost = new ServerHost(this);
+
+        // Inflate the server_popup_layout to access its views
+        View popupView = LayoutInflater.from(this).inflate(R.layout.server_popup_layout, null);
+
+        // Find the EditText instance in the inflated layout
+        EditText editTextForServerChatMessages = popupView.findViewById(R.id.editTextForServerChatMessages);
+
+        // Set the EditText instance in the ServerHost
+        serverHost.setEditTextForServerChatMessages(editTextForServerChatMessages);
+
+        // Start the server
         serverHost.startServer();
     }
+
+
+
 
     private void checkAndEnableWifi() {
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
