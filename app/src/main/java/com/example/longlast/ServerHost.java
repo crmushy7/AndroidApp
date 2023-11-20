@@ -26,6 +26,8 @@ public class ServerHost extends Thread {
     private PrintWriter out;
     private EditText editTextForServerChatMessages;
 
+
+
     public ServerHost(Context context) {
         this.context = context;
         handler = new Handler(Looper.getMainLooper());
