@@ -3,11 +3,17 @@ package com.example.longlast;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -20,25 +26,45 @@ import java.net.Socket;
 public class QRCodeScannerDialogActivity extends AppCompatActivity {
 
     private IntentIntegrator integrator;
-    TextView textView;
+    private TextView textViewReceivedText;
+    private EditText editTextUserInput;
+    private Button buttonSend;
+    private PrintWriter out;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
-        textView=findViewById(R.id.deni);
+        setContentView(R.layout.popup_layout);
+
+        // Initialize UI components
+        textViewReceivedText = findViewById(R.id.textViewReceivedText);
+        editTextUserInput = findViewById(R.id.editTextUserInput);
+        buttonSend = findViewById(R.id.buttonSend);
 
         // Initialize the integrator
         integrator = new IntentIntegrator(this);
 
         // Show the dialog on button click
         showScanDialog();
+
+        // Set up click listener for the Send button
+        buttonSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userInput = editTextUserInput.getText().toString();
+                // Send the user input to the server
+                if (out != null) {
+                    // Send the message to the server using the AsyncTask
+                    new SendTask(out, userInput).execute();
+                }
+            }
+        });
     }
 
     private void showScanDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Scan QR Code");
-        builder.setMessage("You are about to receive money(As a debt) from a person, if this is your desired intention,Click Lend money button from the other device of the person you want to receive money from then click SCAN ");
+        builder.setMessage("You are about to receive money (As a debt) from a person. If this is your desired intention, Click the Lend money button from the other person's device, then click SCAN.");
 
         builder.setPositiveButton("Scan", new DialogInterface.OnClickListener() {
             @Override
@@ -66,8 +92,6 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
         integrator.initiateScan();
     }
 
-    String readedText;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -79,40 +103,8 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
                 // Handle the scanned QR code data (result.getContents())
                 String scannedText = result.getContents();
 
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Socket socket = new Socket(scannedText,1234);
-                            BufferedReader in=new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                            PrintWriter out=new PrintWriter(socket.getOutputStream());
-
-                            out.println("Connection established");
-                            String response=in.readLine();
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    textView.setText(response);
-//                                    Intent intent=new Intent(QRCodeScannerDialogActivity.this, ClientActivity.class);
-//                                    startActivity(intent);
-
-                                }
-                            });
-                            in.close();
-                            out.close();
-                            socket.close();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }).start();
-
-                // Open a dialog box with the extracted text
-                showTextDialog(readedText);
-//                Intent intent=new Intent(QRCodeScannerDialogActivity.this,ClientActivity.class);
-//                intent.putExtra(ClientActivity.ipAdress,scannedText);
-//                startActivity(intent);
+                // Initialize socket communication with the server
+                setupSocket(scannedText);
             } else {
                 // Handle the case where scanning was canceled
                 // You may want to show a message or take appropriate action
@@ -121,21 +113,67 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
         }
     }
 
-    private void showTextDialog(String text) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scanned Text");
-        builder.setMessage(text);
+    private void setupSocket(String serverAddress) {
+        new Thread(() -> {
+            try {
+                Socket socket = new Socket(serverAddress, 1234);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                out = new PrintWriter(socket.getOutputStream(), true);
 
+                while (true) {
+                    String receivedMessage = in.readLine();
+                    if (receivedMessage == null) {
+                        break;
+                    }
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Handle OK button click if needed
-                dialog.dismiss();
+                    runOnUiThread(() -> {
+                        // Update UI with received message
+                        showReceivedText(receivedMessage);
+                    });
+                }
+
+                in.close();
+                out.close();
+                socket.close();
+
+                // After socket communication is done, show the scan dialog again
+                showScanDialog();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
+        }).start();
+    }
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+
+    private void showReceivedText(String receivedText) {
+        // Update the TextView to display received text
+        Toast.makeText(this, receivedText, Toast.LENGTH_SHORT).show();
+        textViewReceivedText.setText("Received Text: " + receivedText);
+    }
+
+    private class SendTask extends AsyncTask<Void, Void, Void> {
+        private final PrintWriter out;
+        private final String message;
+
+        // Constructor to receive PrintWriter and message
+        public SendTask(PrintWriter out, String message) {
+            this.out = out;
+            this.message = message;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // Perform network operations in the background
+            if (out != null) {
+                // Send the message to the server using the PrintWriter
+                out.println(message);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            // Handle any post-execution tasks if needed
+        }
     }
 }
