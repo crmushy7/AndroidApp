@@ -34,7 +34,8 @@ public class DatabaseSupport extends SQLiteOpenHelper {
     public static final String COLUMN_USER_EMAIL = "USER_EMAIL";
 
     public DatabaseSupport(@Nullable Context context, @Nullable String name) {
-        super(context, "records.db",null,1);
+        super(context, "msomali" +
+                ".db",null,1);
     }
 
     @Override
