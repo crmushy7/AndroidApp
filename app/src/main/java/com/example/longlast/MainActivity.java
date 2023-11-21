@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         }else {
             UserRecords userRecords = new UserRecords(0,fullName.getText().toString(),email.getText().toString(),phone.getText().toString(),pswd.getText().toString());
 
-            if(pswd==cpswd){
+            if(pswd.getText().toString().equals(cpswd.getText().toString())){
                 boolean addUser = databaseSupport.addUser(userRecords);
                 if (addUser){
                     Toast.makeText(this, "User Registered!", Toast.LENGTH_LONG).show();
