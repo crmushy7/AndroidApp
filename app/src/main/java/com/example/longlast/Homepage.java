@@ -12,9 +12,12 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.lang.reflect.Method;
 
@@ -23,6 +26,7 @@ public class Homepage extends AppCompatActivity {
     TextView textView;
     boolean serverRunning = false;
     private ServerHost serverHost;
+    ImageView imageView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -33,6 +37,23 @@ public class Homepage extends AppCompatActivity {
         linearLayout = findViewById(R.id.lendmoneylayout);
         borrowmoney = findViewById(R.id.borrowmoneylayout);
         pay = findViewById(R.id.payment);
+        imageView=findViewById(R.id.settings);
+
+        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+
+
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                firebaseAuth.signOut();
+                Intent intent=new Intent(Homepage.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+        });
 
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
