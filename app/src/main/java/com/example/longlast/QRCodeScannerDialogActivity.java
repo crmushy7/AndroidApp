@@ -20,6 +20,7 @@ import java.net.Socket;
 
 public class QRCodeScannerDialogActivity extends AppCompatActivity {
 
+    UserRecords userRecords;
     private IntentIntegrator integrator;
     private EditText editTextForClientChatMessages;
     private EditText editTextUserInput;
@@ -30,6 +31,10 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_layout);
+
+        //Fetch USer details from local Database and set them to userRecords variable.
+        DatabaseSupport databaseSupport = new DatabaseSupport(this,"msomali");
+        userRecords = databaseSupport.getUser();
 
         // Initialize UI components
         editTextForClientChatMessages = findViewById(R.id.editTextForClientChatMessages);

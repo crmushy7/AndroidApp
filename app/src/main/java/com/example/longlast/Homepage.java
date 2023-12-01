@@ -23,6 +23,9 @@ import java.lang.reflect.Method;
 
 public class Homepage extends AppCompatActivity {
     LinearLayout linearLayout, borrowmoney, pay;
+    UserRecords userRecords;
+    TextView dplyUser;
+    TextView kifupiChaJina;
     TextView textView;
     boolean serverRunning = false;
     private ServerHost serverHost;
@@ -38,10 +41,18 @@ public class Homepage extends AppCompatActivity {
         borrowmoney = findViewById(R.id.borrowmoneylayout);
         pay = findViewById(R.id.payment);
         imageView=findViewById(R.id.settings);
+        dplyUser = findViewById(R.id.displayUser);
+        kifupiChaJina = findViewById(R.id.firstAndLastname);
 
         FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        DatabaseSupport databaseSupport = new DatabaseSupport(this,"msomali");
+        userRecords = databaseSupport.getUser();
+        dplyUser.setText(userRecords.getFullName());
+        String firstNameLater = userRecords.getFullName().split(" ", 2)[0];
+        String secondNameLater = userRecords.getFullName().split(" ", 2)[1];
 
 
+        kifupiChaJina.setText(firstNameLater.charAt(0)+""+secondNameLater.charAt(0)+"");
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
