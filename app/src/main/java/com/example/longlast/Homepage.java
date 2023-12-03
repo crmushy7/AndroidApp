@@ -30,10 +30,16 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Method;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Homepage extends AppCompatActivity {
     LinearLayout linearLayout, borrowmoney, pay;
-    TextView textView;
+    TextView textView,dplyUser,kifupiChaJina,emailpart,tarehe,saa;
+    UserRecords userRecords;
     boolean serverRunning = false;
     private ServerHost serverHost;
     private Context context;
@@ -43,13 +49,60 @@ public class Homepage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
+        setContentView(R.layout.newhomepage);
         textView = findViewById(R.id.outdeni);
         linearLayout = findViewById(R.id.lendmoneylayout);
         borrowmoney = findViewById(R.id.borrowmoneylayout);
         pay = findViewById(R.id.payment);
+        kifupiChaJina=findViewById(R.id.shortName);
+        emailpart=findViewById(R.id.userEmaildisplay);
         imageView=findViewById(R.id.settings);
+        dplyUser=findViewById(R.id.displayUserName);
+        tarehe=findViewById(R.id.currentdateset);
+        saa=findViewById(R.id.currenttimeset);
         context=this;
+        DatabaseSupport databaseSupport = new DatabaseSupport(this,"msomali");
+        userRecords = databaseSupport.getUser();
+        dplyUser.setText(userRecords.getFullName());
+        String firstNameLater = userRecords.getFullName().split(" ", 2)[0].toUpperCase();
+        String secondNameLater = userRecords.getFullName().split(" ", 2)[0].toUpperCase();
+        emailpart.setText(userRecords.getEmail());
+        tarehe.setVisibility(View.GONE);
+        saa.setVisibility(View.GONE);
+
+        Thread thread=new Thread(){
+            @Override
+            public void run() {
+                try {
+                    tarehe.setVisibility(View.VISIBLE);
+                    saa.setVisibility(View.VISIBLE);
+                    while (!isInterrupted()){
+                        Thread.sleep(10);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Calendar calendar=Calendar.getInstance();
+                                String currentdate= DateFormat.getDateInstance().format(calendar.getTime());
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss a", Locale.getDefault());
+                                String formattedTime = simpleDateFormat.format(new Date());
+                                saa.setText(formattedTime);
+                                tarehe.setText(currentdate);
+                            }
+                        });
+                    }
+
+                }catch (Exception e){
+
+                }
+
+
+            }
+        };
+        thread.start();
+
+
+        kifupiChaJina.setText(firstNameLater.charAt(0)+""+secondNameLater.charAt(0)+"");
+
 
         FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
 
