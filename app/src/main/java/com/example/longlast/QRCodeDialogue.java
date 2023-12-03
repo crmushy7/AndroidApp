@@ -31,7 +31,7 @@ public class QRCodeDialogue {
     public static void show(final Context context) {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
 
 
         View view = LayoutInflater.from(context).inflate(R.layout.activity_qrcode_dialogue, null);

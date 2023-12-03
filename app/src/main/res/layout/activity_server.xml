@@ -8,47 +8,56 @@
     android:padding="20dp"
     tools:context=".ServerActivity">
 
-    <Button
-        android:id="@+id/start_server"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:onClick="onClick"
-        android:text="Start Server" />
+        android:id="@+id/topviewed"
+        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:text="AMOUNT:"/>
 
-    <EditText
+
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/edMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/start_server"
+        android:layout_below="@+id/topviewed"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:text="Message from Server" />
-
-    <ScrollView
+        android:inputType="number"
+        android:hint="Enter amount" />
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/send_data"
-        android:layout_below="@+id/edMessage">
+        android:id="@+id/descriptionviewed"
+        android:textSize="16dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:layout_below="@id/edMessage"
+        android:text="DESCRIPTION"/>
 
-        <LinearLayout
-            android:id="@+id/msgList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-        </LinearLayout>
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/descriptioned"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/descriptionviewed"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:hint="Write description(optional)" />
 
-    </ScrollView>
+
 
     <Button
-        android:id="@+id/send_data"
-        android:layout_width="match_parent"
+        android:id="@+id/proceedbutton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentBottom="false"
         android:background="@drawable/button1"
-        android:onClick="onClick"
-        android:text="Send Message to Client"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/descriptioned"
+        android:layout_marginTop="15dp"
+        android:text="Proceed"
         android:textColor="@android:color/white" />
 
 </RelativeLayout>

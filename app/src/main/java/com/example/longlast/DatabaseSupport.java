@@ -136,4 +136,9 @@ public class DatabaseSupport extends SQLiteOpenHelper {
         db.close();
         return userRecords;
     }
+
+    public void onUserUpdate(UserRecords userRecords){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+    }
 }

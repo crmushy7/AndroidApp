@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -20,11 +21,12 @@ import java.net.Socket;
 
 public class QRCodeScannerDialogActivity extends AppCompatActivity {
 
-    UserRecords userRecords;
     private IntentIntegrator integrator;
     private EditText editTextForClientChatMessages;
     private EditText editTextUserInput;
+    TextView textView;
     private Button buttonSend;
+    UserRecords userRecords;
     private PrintWriter out;
 
     @Override
@@ -32,15 +34,14 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_layout);
 
-        //Fetch USer details from local Database and set them to userRecords variable.
-        DatabaseSupport databaseSupport = new DatabaseSupport(this,"msomali");
-        userRecords = databaseSupport.getUser();
-
         // Initialize UI components
         editTextForClientChatMessages = findViewById(R.id.editTextForClientChatMessages);
         editTextUserInput = findViewById(R.id.editTextUserInput);
+        textView=findViewById(R.id.textViewReceivedText);
         buttonSend = findViewById(R.id.buttonSend);
 
+        textView.setVisibility(View.GONE);
+        editTextUserInput.setVisibility(View.GONE);
         // Initialize the integrator
         integrator = new IntentIntegrator(this);
 
@@ -112,6 +113,7 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
             }
         }
     }
+    public static String clientName;
 
     private void setupSocket(String serverAddress) {
         new Thread(() -> {
@@ -119,16 +121,26 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
                 Socket socket = new Socket(serverAddress, 1234);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);
+                out.println("You are connected to ");
+                DatabaseSupport databaseSupport = new DatabaseSupport(this,"msomali");
+
+                userRecords = databaseSupport.getUser();
+                String client=userRecords.getFullName();
+                clientName=client;
 
                 while (true) {
+
                     String receivedMessage = in.readLine();
+                    String serverName=in.readLine();
                     if (receivedMessage == null) {
                         break;
                     }
 
                     runOnUiThread(() -> {
+
                         // Update UI with received message
                         showReceivedText(receivedMessage);
+                        showReceivedText(serverName);
                     });
                 }
 
@@ -146,8 +158,7 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
 
     private void showReceivedText(String receivedText) {
         // Append the received message to the EditText
-        editTextForClientChatMessages.append("server: "+receivedText + "\n");
-        Toast.makeText(this, receivedText, Toast.LENGTH_SHORT).show();
+        editTextForClientChatMessages.append(receivedText + "\n");
     }
 
     private class SendTask extends AsyncTask<Void, Void, Void> {
@@ -182,7 +193,6 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
 
         private void showSentMessageToast() {
             runOnUiThread(() -> {
-                Toast.makeText(QRCodeScannerDialogActivity.this, "Message sent successfully", Toast.LENGTH_SHORT).show();
                 // Append the sent message to the EditText
                 editTextForClientChatMessages.append("You: " + message + "\n");
                 editTextUserInput.setText("");

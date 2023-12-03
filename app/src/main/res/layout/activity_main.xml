@@ -42,6 +42,7 @@
 
     </RelativeLayout>
 
+
     <androidx.cardview.widget.CardView
         android:id="@+id/middle"
         android:layout_width="0sp"
@@ -325,6 +326,7 @@
                 android:textColor="#1e90ff"
                 android:textSize="16dp"
                 />
+
 
 
 

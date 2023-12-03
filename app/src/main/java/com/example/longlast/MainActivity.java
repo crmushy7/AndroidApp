@@ -138,10 +138,10 @@ public class MainActivity extends AppCompatActivity {
                     boolean addUser = databaseSupport.addUser(userRecords);
                     String email=emailreg.getText().toString().trim();
                     HashMap<String,Object> hashMap=new HashMap<>();
-                    hashMap.put("Fullname ",fullName.getText().toString().trim());
-                    hashMap.put("username ",email);
-                    hashMap.put("PhoneNumber ",phone.getText().toString().trim());
-                    hashMap.put("Password ",pswd.getText().toString().trim());
+                    hashMap.put("Fullname",fullName.getText().toString().trim());
+                    hashMap.put("username",email);
+                    hashMap.put("PhoneNumber",phone.getText().toString().trim());
+                    hashMap.put("Password",pswd.getText().toString().trim());
 
 
                     if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -159,7 +159,8 @@ public class MainActivity extends AppCompatActivity {
                                             Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
                                             // Your database operations here
                                             databaseReference.child("All Users")
-                                                    .child(fullName.getText().toString().trim()+phone.getText().toString())
+                                                    .child(firebaseAuth.getUid().toString())
+                                                    .child("Details")
                                                     .setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
