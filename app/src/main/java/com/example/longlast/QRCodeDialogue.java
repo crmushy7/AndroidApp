@@ -11,8 +11,10 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
@@ -24,21 +26,65 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
+import java.util.Locale;
 
 public class QRCodeDialogue {
 
-    public static void show(final Context context) {
+
+    UserRecords userRecords;
+
+    public static void show(final Context context,UserRecords userRecords) {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
 
 
+
         View view = LayoutInflater.from(context).inflate(R.layout.activity_qrcode_dialogue, null);
         dialog.setContentView(view);
+        TextView username=view.findViewById(R.id.tvusernameqrcode);
+        TextView phonenumber=view.findViewById(R.id.tvusernumberqrcode);
+        TextView currenttme=view.findViewById(R.id.tvcurrenttimeqr);
+        TextView currentdatee=view.findViewById(R.id.tvcurrentdateqr);
+        TextView currentday=view.findViewById(R.id.tvpresentday);
+        TextView currentmonth=view.findViewById(R.id.tvpresentmonth);
+        TextView currentyear=view.findViewById(R.id.tvcurrentyear);
+        TextView kiasi=view.findViewById(R.id.tvamountqr);
+        TextView useremail=view.findViewById(R.id.tvuserEmailqr);
+        Calendar calendar=Calendar.getInstance();
+        String currentdate= DateFormat.getDateInstance().format(calendar.getTime());
+        SimpleDateFormat dayfFormat=new SimpleDateFormat("EEEE",Locale.getDefault());
+        SimpleDateFormat monthfFormat=new SimpleDateFormat("MMMM",Locale.getDefault());
+        SimpleDateFormat yearfFormat=new SimpleDateFormat("YYYY",Locale.getDefault());
+        String currentday1=dayfFormat.format(calendar.getTime());
+        String currentMonth=monthfFormat.format(calendar.getTime());
+        String currentYear=yearfFormat.format(calendar.getTime());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss a", Locale.getDefault());
+        String formattedTime = simpleDateFormat.format(new Date());
+        currenttme.setText(formattedTime);
+        currentdatee.setText(currentdate);
+        currentday.setText(currentday1);
+        currentmonth.setText(currentMonth);
+        currentyear.setText(currentYear);
+
+//        DatabaseSupport databaseSupport = new DatabaseSupport(userRecords,"msomali");
+//        userRecords =view.databaseSupport.getUser();
+        username.setText(userRecords.getFullName());
+        phonenumber.setText(userRecords.getMobileNumber());
+        kiasi.setText(Homepage.amountToSend+"");
+        useremail.setText(userRecords.getEmail());
+
+
+
 
         final ImageView imageViewQRCode = view.findViewById(R.id.imageViewQRCode);
-        Button buttonGenerateQRCode = view.findViewById(R.id.buttonGenerateQRCode);
+//        Button buttonGenerateQRCode = view.findViewById(R.id.buttonGenerateQRCode);
+
 
         // Get the device's IP address
         new AsyncTask<Void, Void, String>() {
@@ -63,21 +109,28 @@ public class QRCodeDialogue {
             }
         }.execute();
 
-        buttonGenerateQRCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // The button click event is now empty since you want to exclude textname and textprice
-                // If you need to perform any action, you can add it here
-            }
-        });
+//        buttonGenerateQRCode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // The button click event is now empty since you want to exclude textname and textprice
+//                // If you need to perform any action, you can add it here
+//            }
+//        });
+
 
         dialog.show();
+        Window window=dialog.getWindow();
+        WindowManager.LayoutParams layoutParams=new WindowManager.LayoutParams();
+        layoutParams.copyFrom(window.getAttributes());
+        layoutParams.width=1400;
+        layoutParams.height=1500;
+        window.setAttributes(layoutParams);
     }
 
     private static Bitmap generateQRCode(String text) {
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 500, 450);
+            BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 400, 400);
             int width = bitMatrix.getWidth();
             int height = bitMatrix.getHeight();
             Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);

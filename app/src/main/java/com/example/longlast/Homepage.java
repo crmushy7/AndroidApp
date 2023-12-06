@@ -64,8 +64,25 @@ public class Homepage extends AppCompatActivity {
         DatabaseSupport databaseSupport = new DatabaseSupport(this,"msomali");
         userRecords = databaseSupport.getUser();
         dplyUser.setText(userRecords.getFullName());
-        String firstNameLater = userRecords.getFullName().split(" ", 2)[0].toUpperCase();
-        String secondNameLater = userRecords.getFullName().split(" ", 2)[0].toUpperCase();
+
+        String fullName = userRecords.getFullName();
+
+        if (fullName != null) {
+            String[] names = fullName.split(" ", 2);
+
+            if (names.length >= 2) {
+                String firstNameLater = names[0].toUpperCase();
+                String secondNameLater = names[1].toUpperCase();
+
+                kifupiChaJina.setText(firstNameLater.charAt(0) + "" + secondNameLater.charAt(0));
+            } else {
+                String firstNameLater = names[0].toUpperCase();
+                kifupiChaJina.setText(firstNameLater.charAt(0)+""+firstNameLater.charAt(1));
+            }
+        }
+
+//        String firstNameLater = userRecords.getFullName().split(" ", 1)[0].toUpperCase();
+//        String secondNameLater = userRecords.getFullName().split(" ", 1)[0].toUpperCase();
         emailpart.setText(userRecords.getEmail());
         tarehe.setVisibility(View.GONE);
         saa.setVisibility(View.GONE);
@@ -101,7 +118,7 @@ public class Homepage extends AppCompatActivity {
         thread.start();
 
 
-        kifupiChaJina.setText(firstNameLater.charAt(0)+""+secondNameLater.charAt(0)+"");
+//        kifupiChaJina.setText(firstNameLater.charAt(0)+""+secondNameLater.charAt(0)+"");
 
 
         FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
@@ -226,7 +243,6 @@ public class Homepage extends AppCompatActivity {
             Toast.makeText(this, "wifi is already on", Toast.LENGTH_SHORT).show();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Amount to lend");
             View popupView = LayoutInflater.from(context).inflate(R.layout.activity_server, null);
 
             EditText edittextamount = popupView.findViewById(R.id.edMessage);
@@ -246,7 +262,7 @@ public class Homepage extends AppCompatActivity {
                     if (amount.length()==0){
                         edittextamount.setError("input amount");
                     }else {
-                        QRCodeDialogue.show(Homepage.this);
+                        QRCodeDialogue.show(Homepage.this,userRecords);
                         dialog.cancel();
                     }
 

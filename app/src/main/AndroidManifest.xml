@@ -17,14 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Longlast"
         tools:targetApi="31">
+
+
         <activity
             android:name=".QRCodeScannerActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".QRCodeScannerDialogActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".QRCodeDialogue"
             android:exported="false" />
@@ -34,16 +36,14 @@
         <activity
             android:name=".ClientActivity"
             android:exported="false" />
-        <activity
-            android:name=".ServerActivity"
-            android:exported="false" />
+
         <activity
             android:name=".HomeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
