@@ -2,17 +2,24 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@color/white_smoke"
     android:orientation="vertical"
     android:padding="16dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/roundedwhitewithoutborder">
 
     <!-- TextView to display received text -->
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="150dp"
         android:hint="chat here"
         android:textColorHint="@color/white"
-        android:inputType="textMultiLine"
+        android:inputType="none"
         android:gravity="top|start"
         android:id="@+id/editTextForClientChatMessages"/>
     <TextView
@@ -28,26 +35,39 @@
         android:id="@+id/editTextUserInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter your message" />
+        android:hint="" />
 
     <!-- Button to send the entered text -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonCancelClient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:background="@drawable/button1"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
             android:layout_weight="1"
-            android:text="Cancel" />
-        <Button
+            android:text="Cancel"
+            android:layout_marginRight="3dp"
+            android:textColor="@android:color/white" />
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_marginLeft="3dp"
+            android:background="@drawable/button1"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
             android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:text="Send" />
+            android:text="Confirm"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

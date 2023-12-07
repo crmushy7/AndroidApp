@@ -2,54 +2,65 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white_smoke"
+    android:gravity="center_vertical"
     android:padding="16dp">
 
     <!-- TextView to show received text -->
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:hint="Please wait..."
-        android:textColorHint="@color/white"
-        android:inputType="textMultiLine"
-        android:gravity="top|start"
-        android:id="@+id/editTextForServerChatMessages"/>
-    <TextView
-        android:id="@+id/textViewReceivedText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Enter amount"
-        android:textSize="17sp"
-        android:textColor="@color/white"/>
+        android:background="@drawable/roundedwhitewithoutborder"
+        android:orientation="vertical">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:hint="Please wait..."
+            android:textColorHint="@color/white"
+            android:inputType="none"
+            android:editable="false"
+            android:gravity="top|start"
+            android:id="@+id/editTextForServerChatMessages"/>
+        <TextView
+            android:id="@+id/textViewReceivedText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textSize="17sp"
+            android:textColor="@color/white"/>
 
-    <!-- EditText to enter and send text -->
-    <EditText
-        android:id="@+id/editTextServerMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your amount"
-        android:inputType="number"/>
+        <!-- EditText to enter and send text -->
+        <EditText
+            android:id="@+id/editTextServerMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint=""
+            android:inputType="number"/>
 
-    <!-- Button to send the entered text -->
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal">
-      <Button
-          android:id="@+id/buttonCancel"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="Cancel" />
-      <Button
-          android:id="@+id/buttonSendServerMessage"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:layout_marginLeft="10dp"
-          android:text="OK" />
-  </LinearLayout>
+        <!-- Button to send the entered text -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonSendServerMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:background="@drawable/button1"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/descriptioned"
+                android:padding="10dp"
+                android:text="OK"
+                android:textColor="@android:color/white" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

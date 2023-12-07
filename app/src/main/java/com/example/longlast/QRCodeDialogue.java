@@ -17,7 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
@@ -31,22 +35,31 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map;
 
 public class QRCodeDialogue {
 
 
     UserRecords userRecords;
 
+
     public static void show(final Context context,UserRecords userRecords) {
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
+         AlertDialog dialog;
+//        final Dialog dialog = new Dialog(context);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setCancelable(false);
 
-
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.activity_qrcode_dialogue, null);
-        dialog.setContentView(view);
+        builder.setView(view);
+        dialog = builder.create();
+
+
+
+
+//        dialog.setContentView(view);
         TextView username=view.findViewById(R.id.tvusernameqrcode);
         TextView phonenumber=view.findViewById(R.id.tvusernumberqrcode);
         TextView currenttme=view.findViewById(R.id.tvcurrenttimeqr);
@@ -119,25 +132,28 @@ public class QRCodeDialogue {
 
 
         dialog.show();
-        Window window=dialog.getWindow();
-        WindowManager.LayoutParams layoutParams=new WindowManager.LayoutParams();
-        layoutParams.copyFrom(window.getAttributes());
-        layoutParams.width=1400;
-        layoutParams.height=1500;
-        window.setAttributes(layoutParams);
+//        Window window=dialog.getWindow();
+//        WindowManager.LayoutParams layoutParams=new WindowManager.LayoutParams();
+//        layoutParams.copyFrom(window.getAttributes());
+//        layoutParams.width=1000;
+//        layoutParams.height=1300;
+//        window.setAttributes(layoutParams);
     }
 
     private static Bitmap generateQRCode(String text) {
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 400, 400);
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
+            Map<EncodeHintType,Object> hints=new Hashtable<>();
+            hints.put(EncodeHintType.MARGIN,0);
+            BitMatrix bmat=new MultiFormatWriter().encode(text,BarcodeFormat.QR_CODE,900,900,hints);
+//            BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 900, 900);
+            int width = 900;
+            int height = 900;
             Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
 
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    bitmap.setPixel(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+                    bitmap.setPixel(x, y, bmat.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
                 }
             }
 
