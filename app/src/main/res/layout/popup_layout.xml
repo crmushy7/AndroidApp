@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@color/white_smoke"
+    android:background="#0000ffff"
     android:orientation="vertical"
     android:padding="16dp">
     <LinearLayout
@@ -18,7 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:hint="chat here"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:inputType="none"
         android:gravity="top|start"
         android:id="@+id/editTextForClientChatMessages"/>

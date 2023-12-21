@@ -101,6 +101,9 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() != null) {
+                // close the server scanned dialog
+                QRCodeDialogue qrCodeDialogue = new QRCodeDialogue();
+                qrCodeDialogue.setIsOpen(false);
                 // Handle the scanned QR code data (result.getContents())
                 String scannedText = result.getContents();
 
@@ -177,7 +180,7 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
             try {
                 if (out != null) {
                     // Send the message to the server using the PrintWriter
-                    out.println("Client: " + message);
+                    out.println("Feedback: " + message);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

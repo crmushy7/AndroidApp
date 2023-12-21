@@ -43,6 +43,11 @@ public class QRCodeDialogue {
 
 
     UserRecords userRecords;
+    private boolean isOpen = true;
+
+    public void setIsOpen(boolean isOpen) {
+        this.isOpen = isOpen;
+    }
 
 
     public static void show(final Context context,UserRecords userRecords) {
@@ -132,6 +137,10 @@ public class QRCodeDialogue {
 
 
         dialog.show();
+
+//        while (!this.isOpen) {
+//            dialog.cancel();
+//        }
 //        Window window=dialog.getWindow();
 //        WindowManager.LayoutParams layoutParams=new WindowManager.LayoutParams();
 //        layoutParams.copyFrom(window.getAttributes());

@@ -97,6 +97,7 @@ public class ServerHost extends Thread {
 
 //pull jina langu hapa
             while (serverRunning) {
+//                QRCodeDialogue.
                 Socket socket = srSocket.accept();
                 String newdata="You are about to receive "+ Homepage.amountToSend +"Tsh from "+userRecords.getFullName();
                 out = new PrintWriter(socket.getOutputStream(), true);
@@ -105,6 +106,7 @@ public class ServerHost extends Thread {
 
 
                 showServerPopup();
+
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 

@@ -18,8 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:hint="Please wait..."
-            android:textColorHint="@color/white"
+            android:textColorHint="@color/black"
             android:inputType="none"
+            android:textColor="@color/black"
             android:editable="false"
             android:gravity="top|start"
             android:id="@+id/editTextForServerChatMessages"/>
@@ -30,7 +31,7 @@
             android:gravity="center"
             android:text=""
             android:textSize="17sp"
-            android:textColor="@color/white"/>
+            android:textColor="@color/black"/>
 
         <!-- EditText to enter and send text -->
         <EditText
