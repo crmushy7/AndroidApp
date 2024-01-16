@@ -94,7 +94,7 @@ public class QRCodeDialogue {
 //        userRecords =view.databaseSupport.getUser();
         username.setText(userRecords.getFullName());
         phonenumber.setText(userRecords.getMobileNumber());
-        kiasi.setText(Homepage.amountToSend+"");
+        kiasi.setText(Homepage.amountToSend+" Tsh");
         useremail.setText(userRecords.getEmail());
 
 
@@ -138,9 +138,9 @@ public class QRCodeDialogue {
 
         dialog.show();
 
-//        while (!this.isOpen) {
-//            dialog.cancel();
-//        }
+        while (!dialog.isShowing()) {
+            dialog.cancel();
+        }
 //        Window window=dialog.getWindow();
 //        WindowManager.LayoutParams layoutParams=new WindowManager.LayoutParams();
 //        layoutParams.copyFrom(window.getAttributes());
@@ -176,10 +176,11 @@ public class QRCodeDialogue {
 
     private static String getDeviceIPAddress(Context context) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        int ipAddress=0;
 
         if (wifiManager != null && wifiManager.isWifiEnabled()) {
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            int ipAddress = wifiInfo.getIpAddress();
+             ipAddress = wifiInfo.getIpAddress();
             return formatIPAddress(ipAddress);
         } else {
             return getHotspotIPAddress();

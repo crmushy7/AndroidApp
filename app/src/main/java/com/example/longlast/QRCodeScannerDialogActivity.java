@@ -9,8 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import java.io.BufferedReader;
@@ -34,29 +35,32 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_layout);
 
-        // Initialize UI components
         editTextForClientChatMessages = findViewById(R.id.editTextForClientChatMessages);
         editTextUserInput = findViewById(R.id.editTextUserInput);
-        textView=findViewById(R.id.textViewReceivedText);
+        textView = findViewById(R.id.textViewReceivedText);
         buttonSend = findViewById(R.id.buttonSend);
 
         textView.setVisibility(View.GONE);
         editTextUserInput.setVisibility(View.GONE);
-        // Initialize the integrator
+
         integrator = new IntentIntegrator(this);
 
-        // Show the dialog on button click
         showScanDialog();
 
-        // Set up click listener for the Send button
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userInput = editTextUserInput.getText().toString();
-                // Send the user input to the server
+                String userInput = "OKAY";
+                Intent intent = new Intent(QRCodeScannerDialogActivity.this, Homepage.class);
+                startActivity(intent);
+
+                // Send the userRecords details to the server
                 if (out != null) {
-                    // Send the message to the server using the AsyncTask
-                    new SendTask(out, userInput).execute();
+                    String fullName = userRecords.getFullName();
+                    String username = userRecords.getEmail();
+                    String phoneNumber = userRecords.getMobileNumber();
+
+                    new SendTask(out, fullName, username, phoneNumber).execute();
                 }
             }
         });
@@ -70,7 +74,6 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
         builder.setPositiveButton("Scan", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Start QR code scanning
                 startQRCodeScan();
             }
         });
@@ -78,7 +81,6 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Handle cancel action
                 finish();
             }
         });
@@ -89,7 +91,7 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
 
     private void startQRCodeScan() {
         integrator.setOrientationLocked(false);
-        integrator.setCaptureActivity(QRCodeScannerActivity.class); // Custom QRCodeScannerActivity
+        integrator.setCaptureActivity(QRCodeScannerActivity.class);
         integrator.initiateScan();
     }
 
@@ -97,26 +99,19 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Handle the result of the QR code scan
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() != null) {
-                // close the server scanned dialog
                 QRCodeDialogue qrCodeDialogue = new QRCodeDialogue();
                 qrCodeDialogue.setIsOpen(false);
-                // Handle the scanned QR code data (result.getContents())
-                String scannedText = result.getContents();
 
-                // Initialize socket communication with the server
+                String scannedText = result.getContents();
                 setupSocket(scannedText);
             } else {
-                // Handle the case where scanning was canceled
-                // You may want to show a message or take appropriate action
-                finish(); // Finish the activity if scanning was canceled
+                finish();
             }
         }
     }
-    public static String clientName;
 
     private void setupSocket(String serverAddress) {
         new Thread(() -> {
@@ -124,24 +119,19 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
                 Socket socket = new Socket(serverAddress, 1234);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);
-                out.println("You are connected to ");
-                DatabaseSupport databaseSupport = new DatabaseSupport(this,"msomali");
 
+                DatabaseSupport databaseSupport = new DatabaseSupport(this, "msomali");
                 userRecords = databaseSupport.getUser();
-                String client=userRecords.getFullName();
-                clientName=client;
+                String client = userRecords.getFullName();
 
                 while (true) {
-
                     String receivedMessage = in.readLine();
-                    String serverName=in.readLine();
+                    String serverName = in.readLine();
                     if (receivedMessage == null) {
                         break;
                     }
 
                     runOnUiThread(() -> {
-
-                        // Update UI with received message
                         showReceivedText(receivedMessage);
                         showReceivedText(serverName);
                     });
@@ -151,7 +141,6 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
                 out.close();
                 socket.close();
 
-                // After socket communication is done, show the scan dialog again
                 showScanDialog();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -160,27 +149,30 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
     }
 
     private void showReceivedText(String receivedText) {
-        // Append the received message to the EditText
         editTextForClientChatMessages.append(receivedText + "\n");
     }
 
     private class SendTask extends AsyncTask<Void, Void, Void> {
         private final PrintWriter out;
-        private final String message;
+        private final String fullName;
+        private final String username;
+        private final String phoneNumber;
 
-        // Constructor to receive PrintWriter and message
-        public SendTask(PrintWriter out, String message) {
+        public SendTask(PrintWriter out, String fullName, String username, String phoneNumber) {
             this.out = out;
-            this.message = message;
+            this.fullName = fullName;
+            this.username = username;
+            this.phoneNumber = phoneNumber;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            // Perform network operations in the background
             try {
                 if (out != null) {
-                    // Send the message to the server using the PrintWriter
-                    out.println("Feedback: " + message);
+                    out.println("OKAY"+","+fullName+","+username+","+ FirebaseAuth.getInstance().getUid().toString());
+                    out.println(fullName);
+                    out.println(username);
+                    out.println(phoneNumber);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -190,17 +182,9 @@ public class QRCodeScannerDialogActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            // This method runs on the main thread, so you can safely update the UI here
-            showSentMessageToast();
-        }
-
-        private void showSentMessageToast() {
             runOnUiThread(() -> {
-                // Append the sent message to the EditText
-                editTextForClientChatMessages.append("You: " + message + "\n");
                 editTextUserInput.setText("");
             });
         }
     }
-
 }

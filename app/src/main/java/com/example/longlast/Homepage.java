@@ -3,6 +3,8 @@ package com.example.longlast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -32,8 +34,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Homepage extends AppCompatActivity {
@@ -44,6 +48,9 @@ public class Homepage extends AppCompatActivity {
     private ServerHost serverHost;
     private Context context;
     ImageView imageView;
+    private ReceiptAdapter adapter;
+    private RecyclerView recyclerView;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -65,7 +72,107 @@ public class Homepage extends AppCompatActivity {
         userRecords = databaseSupport.getUser();
         dplyUser.setText(userRecords.getFullName());
 
-        String fullName = userRecords.getFullName();
+
+        recyclerView = findViewById(R.id.recyclerView); // Replace with your RecyclerView ID
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new ReceiptAdapter(new ArrayList<>()); // Initialize the adapter with an empty list
+        recyclerView.setAdapter(adapter);
+
+
+        TextView debitview=findViewById(R.id.debitAmount);
+        TextView creditview=findViewById(R.id.credittext);
+        DatabaseReference receiptRef=FirebaseDatabase.getInstance().getReference()
+                .child("All Users")
+                .child(FirebaseAuth.getInstance().getUid().toString())
+                .child("Receipts")
+                .child("Debit");
+        receiptRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Receipt> receiptList = new ArrayList<>();
+                long sum=0;
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    String debtor = dataSnapshot.child("creditor").getValue(String.class);
+                    String debtorEmail = dataSnapshot.child("debtor Email").getValue(String.class);
+                    String amount = dataSnapshot.child("Amount").getValue(String.class);
+                    String date = dataSnapshot.child("Date").getValue(String.class);
+                    String time = dataSnapshot.child("Time").getValue(String.class);
+                    String status="Debit";
+
+                    // Create Receipt object with the details
+                    Receipt receipt = new Receipt(debtor, debtorEmail, amount, date, time,status);
+
+                    receiptList.add(receipt);
+                    if (amount !=null){
+                        try {
+                            long amountValue=Long.parseLong(amount);
+                            sum +=amountValue;
+                        }catch (NumberFormatException e){
+
+                        }
+                    }else {
+                        sum=0;
+                    }
+                }
+                adapter.setReceipts(receiptList);
+                adapter.notifyDataSetChanged();
+                debitview.setText(sum+" Tsh");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        DatabaseReference receiptCreditRef=FirebaseDatabase.getInstance().getReference()
+                .child("All Users")
+                .child(FirebaseAuth.getInstance().getUid().toString())
+                .child("Receipts")
+                .child("Credit");
+        receiptCreditRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Receipt> receiptList = new ArrayList<>();
+                long sum=0;
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    String debtor = dataSnapshot.child("debtor").getValue(String.class);
+                    String debtorEmail = dataSnapshot.child("debtor Email").getValue(String.class);
+                    String amount = dataSnapshot.child("Amount").getValue(String.class);
+                    String date = dataSnapshot.child("Date").getValue(String.class);
+                    String time = dataSnapshot.child("Time").getValue(String.class);
+                    String status="Credit";
+
+                    // Create Receipt object with the details
+                    Receipt receipt = new Receipt(debtor, debtorEmail, amount, date, time,status);
+
+                    receiptList.add(receipt);
+                    if (amount !=null){
+                        try {
+                            long amountValue=Long.parseLong(amount);
+                            sum +=amountValue;
+                        }catch (NumberFormatException e){
+
+                        }
+                    }else {
+                        sum=0;
+                    }
+                }
+                adapter.setReceipts(receiptList);
+                adapter.notifyDataSetChanged();
+                creditview.setText(sum+" Tsh");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+    String fullName = userRecords.getFullName();
 
         if (fullName != null) {
             String[] names = fullName.split(" ", 2);
@@ -274,44 +381,4 @@ public class Homepage extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        TextView tv=findViewById(R.id.tvdisplayname);
-//
-//        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//
-//        // Reference to the "All Users" node in your Firebase Realtime Database
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("All Users").child(userUid).child("Details");
-//
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    Log.d("TAG", "DataSnapshot key: " + dataSnapshot.getKey());
-//                    Log.d("TAG", "DataSnapshot value: " + dataSnapshot.getValue());
-//
-//                    Toast.makeText(Homepage.this, "Exists", Toast.LENGTH_SHORT).show();
-//
-//                    // Retrieve the user data
-//                    String fullName = dataSnapshot.child("Fullname").exists() ? dataSnapshot.child("Fullname").getValue(String.class) : "";
-//                    String email = dataSnapshot.child("username").exists() ? dataSnapshot.child("username").getValue(String.class) : "";
-//                    String phoneNumber = dataSnapshot.child("PhoneNumber").exists() ? dataSnapshot.child("PhoneNumber").getValue(String.class) : "";
-//
-//
-//                    tv.setText(fullName);
-//                    Toast.makeText(Homepage.this, "Fullname: " + fullName + "\nEmail: " + email + "\nPhone Number: " + phoneNumber, Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(Homepage.this, "Data not found", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                // Handle any errors that occur
-//                Toast.makeText(Homepage.this, "Database error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//    }
 }

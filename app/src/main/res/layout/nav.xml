@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:id="@+id/nav_id"
+    android:layout_marginBottom="10dp"
+    android:background="#FAFDFD">
+    <ImageView
+        android:id="@+id/account_id"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/account"/>
+    <LinearLayout
+        android:id="@+id/msomali"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:orientation="vertical"
+        android:layout_toEndOf="@+id/account_id"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Hi,Mlambo Hamis"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:text="msomalimsomali77@gmail.com"/>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/setting_id"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/setting_icon"/>
+
+</RelativeLayout>

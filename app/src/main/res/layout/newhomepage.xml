@@ -96,9 +96,10 @@
                         android:textSize="17dp"
                         android:text="Debt"/>
                     <TextView
+                        android:id="@+id/debitAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tsh 100000"
+                        android:text="Loading.."
                         android:textStyle="bold"
                         android:textSize="20dp"/>
                     <TextView
@@ -121,9 +122,10 @@
                         android:textAlignment="textEnd"
                         android:text="Credit"/>
                     <TextView
+                        android:id="@+id/credittext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tsh 100000"
+                        android:text="Loading.."
                         android:textAlignment="textEnd"
                         android:textStyle="bold"
                         android:textSize="20dp"/>
@@ -187,7 +189,7 @@
                     android:gravity="center"
                     android:text="Lend money"
                     android:textColor="@color/black"
-                    android:textSize="12dp" />
+                    android:textSize="14sp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -222,7 +224,7 @@
                     android:gravity="center"
                     android:text="Borrow money"
                     android:textColor="@color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -257,7 +259,7 @@
                     android:gravity="center"
                     android:text="Pay Debt"
                     android:textColor="@color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -292,7 +294,7 @@
                     android:gravity="center"
                     android:text="Others"
                     android:textColor="@color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -320,7 +322,7 @@
                     android:layout_height="wrap_content"
                     android:text="See More"
                     android:textColor="@color/black"
-                    android:padding="3dp"/>
+                    android:padding="5dp"/>
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -340,6 +342,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:padding="3sp"
                 android:background="@drawable/roundedsmallwhite"
                 android:layout_weight="1">
                 <TextView
@@ -371,6 +374,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:padding="3sp"
                 android:layout_marginLeft="4dp"
                 android:background="@drawable/roundedsmallwhite"
                 android:layout_weight="1">
@@ -404,6 +408,7 @@
                 android:orientation="vertical"
                 android:paddingBottom="10dp"
                 android:gravity="center"
+                android:padding="3sp"
                 android:layout_marginLeft="4dp"
                 android:background="@drawable/roundedsmallwhite"
                 android:layout_weight="1">
@@ -456,7 +461,7 @@
                     android:layout_height="wrap_content"
                     android:text="See More"
                     android:textColor="@color/black"
-                    android:padding="3dp"/>
+                    android:padding="5dp"/>
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -466,198 +471,12 @@
                     android:src="@drawable/fowardarrow"/>
             </LinearLayout>
         </LinearLayout>
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#0000ffff"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="9dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/roundedwhitewithoutborder"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/roundedhistory"
-                    android:padding="15px"
-                    android:text="MB"
-                    android:textColor="#333366"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="7dp"
-                    android:textSize="25dp" />
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="Gidion Mushi"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Debit"
-                        android:textColor="#ff0000"
-                        android:layout_marginTop="2dp"
-                        android:background="@drawable/roundedred"
-                        android:padding="3dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="Tsh 250000"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="02/12/2022"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="11:45 Am"/>
+            android:id="@+id/recyclerView"
+            />
 
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="9dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/roundedwhitewithoutborder"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/roundedhistory"
-                    android:padding="15px"
-                    android:text="MB"
-                    android:textColor="#333366"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="7dp"
-                    android:textSize="25dp" />
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="Gidion Mushi"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Debit"
-                        android:textColor="#ff0000"
-                        android:layout_marginTop="2dp"
-                        android:background="@drawable/roundedred"
-                        android:padding="3dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="Tsh 250000"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="02/12/2022"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="11:45 Am"/>
-
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="9dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/roundedwhitewithoutborder"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/roundedhistory"
-                    android:padding="15px"
-                    android:text="MB"
-                    android:textColor="#333366"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="7dp"
-                    android:textSize="25dp" />
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="Gidion Mushi"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Credit"
-                        android:textColor="#00cc00"
-                        android:layout_marginTop="2dp"
-                        android:background="@drawable/roundedgreen"
-                        android:padding="3dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="Tsh 250000"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="02/12/2022"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:text="11:45 Am"/>
-
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
 
 
 
