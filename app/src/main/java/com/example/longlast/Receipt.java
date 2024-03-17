@@ -7,6 +7,7 @@ public class Receipt {
     private String date;
     private String time;
     private String status;
+    private String transactionId;
 
 
 // Constructors, getters, and setters
@@ -15,13 +16,22 @@ public class Receipt {
         // Default constructor required for Firebase
     }
 
-    public Receipt(String debtor, String debtorEmail, String amount, String date, String time,String status) {
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public Receipt(String debtor, String debtorEmail, String amount, String date, String time, String status, String transactionId) {
         this.debtor = debtor;
         this.debtorEmail = debtorEmail;
         this.amount = amount;
         this.date = date;
         this.time = time;
         this.status = status;
+        this.transactionId=transactionId;
     }
 
     public String getDebtor() {

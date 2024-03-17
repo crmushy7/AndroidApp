@@ -93,7 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="msomalimsomali77@gmail.com"
-                    android:textColor="@color/black"
+                    android:textColor="@color/purple_mod"
                     android:id="@+id/risitiEmail"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:text="10000.00"
-                    android:textColor="@color/black"
+                    android:textColor="@color/purple_mod"
                     android:id="@+id/risitiAmount"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -148,7 +148,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="3 dec 2023"
                     android:id="@+id/risitiDate"
-                    android:textColor="@color/black"
+                    android:textColor="@color/purple_mod"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </RelativeLayout>
@@ -170,7 +170,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="06:35 PM"
                     android:id="@+id/risitiTime"
-                    android:textColor="@color/black"
+                    android:textColor="@color/purple_mod"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </RelativeLayout>
@@ -192,7 +192,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="2341wq"
                     android:id="@+id/risitiTransactionId"
-                    android:textColor="@color/black"
+                    android:textColor="@color/purple_mod"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </RelativeLayout>
@@ -214,7 +214,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="#1"
                     android:id="@+id/risitiTransactionNumber"
-                    android:textColor="@color/black"
+                    android:textColor="@color/purple_mod"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </RelativeLayout>

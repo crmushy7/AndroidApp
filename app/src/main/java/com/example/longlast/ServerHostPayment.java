@@ -29,6 +29,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,9 +60,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-public class ServerHost extends Thread {
+public class ServerHostPayment extends Thread {
     private ServerSocket srSocket;
-    public static int portNumber=0;
     private boolean serverRunning;
     private Handler handler;
     private Context context;
@@ -72,7 +74,7 @@ public class ServerHost extends Thread {
     private ProgressDialog progressDialog;
     private AlertDialog dialog;
 
-    public ServerHost(Context context) {
+    public ServerHostPayment(Context context) {
         this.context = context;
         handler = new Handler(Looper.getMainLooper());
     }
@@ -81,7 +83,7 @@ public class ServerHost extends Thread {
         this.editTextForServerChatMessages = editText;
     }
 
-    public void startServer() {
+    public void startServer(String transactionId) {
         if (editTextForServerChatMessages == null) {
             throw new IllegalStateException("EditText instance is not set. Call setEditTextForServerChatMessages() before starting the server.");
         }
@@ -140,11 +142,9 @@ public class ServerHost extends Thread {
                 in.close();
                 out.close();
                 socket.close();
-                portNumber = 0; // Not sure what you intend to do with this line
             }
         } catch (IOException e) {
             e.printStackTrace();
-//            throw new RuntimeException(e+"hapaa");
         } finally {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
@@ -169,7 +169,6 @@ public class ServerHost extends Thread {
 
 
     }
-
 
     private void sendToClient(String userData) {
         out.println(userData);
@@ -198,42 +197,143 @@ public class ServerHost extends Thread {
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("All Users");
             DatabaseReference userRef = databaseReference.child(FirebaseAuth.getInstance().getUid().toString());
-            DatabaseReference receiptRef = userRef.child("Receipts").child("Credit").push();
-            receiptRef.child("debtor").setValue(parts[1]);
-            receiptRef.child("debtor Email").setValue(parts[2]);
-            receiptRef.child("Amount").setValue(Homepage.amountToSend);
-            receiptRef.child("Date").setValue(currentdate);
-            receiptRef.child("Time").setValue(formattedTime);
-            receiptRef.child("Status").setValue("Credit");
 
-            receiptRef = userRef.child("Receipts").child("All Receipt").push();
-            receiptRef.child("debtor").setValue(parts[1]);
-            receiptRef.child("debtor Email").setValue(parts[2]);
-            receiptRef.child("Amount").setValue(Homepage.amountToSend);
-            receiptRef.child("Date").setValue(currentdate);
-            receiptRef.child("Time").setValue(formattedTime);
-            receiptRef.child("Status").setValue("Credit");
+
+//            receiptRef = userRef.child("Receipts").child("All Receipt").push();
+//            receiptRef.child("debtor").setValue(parts[1]);
+//            receiptRef.child("debtor Email").setValue(parts[2]);
+//            receiptRef.child("Amount").setValue(Homepage.amountToSend);
+//            receiptRef.child("Date").setValue(currentdate);
+//            receiptRef.child("Time").setValue(formattedTime);
+//            receiptRef.child("Status").setValue("Credit");
 
 
 
             //kwa mdaiwa
             DatabaseReference debtorRef=databaseReference.child(parts[3]);
-            DatabaseReference debtorReceiptRef=debtorRef.child("Receipts").child("Debit").child(receiptRef.getKey().toString());
-            debtorReceiptRef.child("creditor").setValue(userRecords.getFullName());
-            debtorReceiptRef.child("creditor Email").setValue(userRecords.getEmail());
-            debtorReceiptRef.child("Amount").setValue(Homepage.amountToSend);
-            debtorReceiptRef.child("Date").setValue(currentdate);
-            debtorReceiptRef.child("Time").setValue(formattedTime);
-            debtorReceiptRef.child("Status").setValue("Debt");
 
 
-            debtorReceiptRef=debtorRef.child("Receipts").child("All Receipt").child(receiptRef.getKey().toString());
-            debtorReceiptRef.child("creditor").setValue(userRecords.getFullName());
-            debtorReceiptRef.child("creditor Email").setValue(userRecords.getEmail());
-            debtorReceiptRef.child("Amount").setValue(Homepage.amountToSend);
-            debtorReceiptRef.child("Date").setValue(currentdate);
-            debtorReceiptRef.child("Time").setValue(formattedTime);
-            debtorReceiptRef.child("Status").setValue("Debt");
+
+//            debtorReceiptRef=debtorRef.child("Receipts").child("All Receipt").child(receiptRef.getKey().toString());
+//            debtorReceiptRef.child("creditor").setValue(userRecords.getFullName());
+//            debtorReceiptRef.child("creditor Email").setValue(userRecords.getEmail());
+//            debtorReceiptRef.child("Amount").setValue(Homepage.amountToSend);
+//            debtorReceiptRef.child("Date").setValue(currentdate);
+//            debtorReceiptRef.child("Time").setValue(formattedTime);
+//            debtorReceiptRef.child("Status").setValue("Debt");
+
+            DatabaseReference creditReceiveRef = userRef.child("Receipts").child("Debit").child(Homepage.receiptID);
+            DatabaseReference creditAllReceipts = userRef.child("Receipts").child("All Receipt").child(Homepage.receiptID);
+            DatabaseReference debitAllReceipts = debtorRef.child("Receipts").child("All Receipt").child(Homepage.receiptID);
+            debitAllReceipts.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                Toast.makeText(context, "Exist...", Toast.LENGTH_SHORT).show();
+                                DatabaseReference debtorReceiptRef=debtorRef.child("Receipts").child("Paid").child(Homepage.receiptID);
+                                DatabaseReference debtorReceiptRefCleared=debtorRef.child("Receipts").child("Cleared").child(Homepage.receiptID);
+                                DatabaseReference receiptRef = userRef.child("Receipts").child("Paid").child(Homepage.receiptID);
+                                DatabaseReference receiptRefCleared = userRef.child("Receipts").child("Cleared").child(Homepage.receiptID);
+                                DatabaseReference debitReceivedRef=debtorRef.child("Receipts").child("Credit").child(Homepage.receiptID);
+                                int amount=0;
+                                int payAmount=0;
+                                amount=Integer.parseInt(snapshot.child("Amount").getValue(String.class));
+                                payAmount=Integer.parseInt(Homepage.amounttopay);
+                                Toast.makeText(context, amount+" "+payAmount, Toast.LENGTH_SHORT).show();
+
+                                int actualAmount=amount-payAmount;
+                                if (actualAmount==0){
+                                    creditAllReceipts.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Toast.makeText(context, "successfully cleared!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    debitAllReceipts.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Toast.makeText(context, "successfully cleared!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    debitReceivedRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if(snapshot.exists()){
+                                                debitReceivedRef.removeValue();
+                                            }else{
+                                                Toast.makeText(context, "debit unavailable", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                    creditReceiveRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if(snapshot.exists()){
+                                                creditReceiveRef.removeValue();
+                                            }else{
+                                                Toast.makeText(context, "credit unavailable", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+
+                                    //nazihifadhi kwenye page ya history ambazo ni cleared zote
+                                    debtorReceiptRefCleared.child("Amount").setValue(actualAmount+"");
+                                    debtorReceiptRefCleared.child("creditor").setValue(userRecords.getFullName());
+                                    debtorReceiptRefCleared.child("creditor Email").setValue(userRecords.getEmail());
+                                    debtorReceiptRefCleared.child("Date").setValue(currentdate);
+                                    debtorReceiptRefCleared.child("Time").setValue(formattedTime);
+                                    debtorReceiptRefCleared.child("Status").setValue("Cleared");
+
+                                    receiptRefCleared.child("Amount").setValue(actualAmount+"");
+                                    receiptRefCleared.child("debtor").setValue(parts[1]);
+                                    receiptRefCleared.child("debtor Email").setValue(parts[2]);
+                                    receiptRefCleared.child("Date").setValue(currentdate);
+                                    receiptRefCleared.child("Time").setValue(formattedTime);
+                                    receiptRefCleared.child("Status").setValue("Debt");
+
+
+                                } else if (actualAmount<0) {
+                                    Toast.makeText(context, "The amount being paid exceeds the actual required amount", Toast.LENGTH_LONG).show();
+                                    ServerHost.closeSocket();
+                                }else{
+                                    creditReceiveRef.child("Amount").setValue(actualAmount+"");
+                                    debitReceivedRef.child("Amount").setValue(actualAmount+"");
+                                    debtorReceiptRef.child("creditor").setValue(userRecords.getFullName());
+                                    debtorReceiptRef.child("creditor Email").setValue(userRecords.getEmail());
+                                    debtorReceiptRef.child("Date").setValue(currentdate);
+                                    debtorReceiptRef.child("Time").setValue(formattedTime);
+                                    debtorReceiptRef.child("Status").setValue("Debt");
+
+                                    creditReceiveRef.child("debtor").setValue(parts[1]);
+                                    creditReceiveRef.child("debtor Email").setValue(parts[2]);
+                                    creditReceiveRef.child("Date").setValue(currentdate);
+                                    creditReceiveRef.child("Time").setValue(formattedTime);
+                                    creditReceiveRef.child("Status").setValue("credit");
+                                    creditAllReceipts.child("Amount").setValue(actualAmount+"");
+                                    debitAllReceipts.child("Amount").setValue(actualAmount+"");
+
+                                }
+
+                            }else {
+                                Toast.makeText(context, "Receipt unavailable", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
 
 
             receivedTime.setText(formattedTime);
@@ -255,10 +355,10 @@ public class ServerHost extends Thread {
                 }
             }
             receiverName.setText(parts[1]);
-            receivedAmount.setText(Homepage.amountToSend + " Tsh");
-            receivedaMOUNT2.setText(Homepage.amountToSend + " Tsh");
+            receivedAmount.setText(Homepage.amounttopay + " Tsh");
+            receivedaMOUNT2.setText(Homepage.amounttopay + " Tsh");
             receiverEmail.setText(parts[2]);
-            transactionID.setText(receiptRef.getKey());
+            transactionID.setText(Homepage.receiptID);
 
             okReceipt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -316,7 +416,6 @@ public class ServerHost extends Thread {
             e.printStackTrace();
         }
     }
-
 
 }
 

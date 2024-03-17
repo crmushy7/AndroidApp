@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Msomali App</string>
+    <string name="app_name">Money App</string>
     <string name="title_activity_home">HomeActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_smoke">
+    android:background="@color/white">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -66,13 +66,13 @@
                 android:layout_height="match_parent"
                 android:contentDescription="setting"
                 android:contextClickable="true"
-                android:src="@drawable/setting" />
+                android:src="@drawable/logouticon" />
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:layout_marginTop="15dp"
-            android:background="@drawable/roundedwhitesmoke">
+            android:background="@drawable/roundedwhite">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -188,7 +188,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="Lend money"
-                    android:textColor="@color/black"
+                    android:textColor="@color/purple_mod"
                     android:textSize="14sp" />
             </LinearLayout>
             <LinearLayout
@@ -223,7 +223,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="Borrow money"
-                    android:textColor="@color/black"
+                    android:textColor="@color/purple_mod"
                     android:textSize="12sp" />
             </LinearLayout>
             <LinearLayout
@@ -257,15 +257,17 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Pay Debt"
-                    android:textColor="@color/black"
+                    android:text="Receive"
+                    android:textColor="@color/purple_mod"
                     android:textSize="12sp" />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btnOthers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:clickable="true"
                 android:layout_margin="5dp"
                 android:layout_weight="1">
 
@@ -293,150 +295,13 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="Others"
-                    android:textColor="@color/black"
+                    android:textColor="@color/purple_mod"
                     android:textSize="12sp" />
             </LinearLayout>
 
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Your Activity"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:textSize="23dp"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/roundedwhite"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More"
-                    android:textColor="@color/black"
-                    android:padding="5dp"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="3dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:src="@drawable/fowardarrow"/>
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="3sp"
-                android:background="@drawable/roundedsmallwhite"
-                android:layout_weight="1">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Gidion Mushi"
-                    android:textColor="@color/black"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+10000"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_weight="1"/>
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/fowardarrow"
-                        android:layout_marginLeft="8dp"
-                        android:rotation="700"/>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="3sp"
-                android:layout_marginLeft="4dp"
-                android:background="@drawable/roundedsmallwhite"
-                android:layout_weight="1">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="Gidion Mushi"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+10000"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_weight="1"/>
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/fowardarrow"
-                        android:layout_marginLeft="8dp"
-                        android:rotation="700"/>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingBottom="10dp"
-                android:gravity="center"
-                android:padding="3sp"
-                android:layout_marginLeft="4dp"
-                android:background="@drawable/roundedsmallwhite"
-                android:layout_weight="1">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="Gidion Mushi"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="-10000"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_weight="1"/>
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/fowardarrow"
-                        android:layout_marginLeft="8dp"
-                        android:rotation="140"/>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -450,37 +315,16 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:textSize="23dp"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/roundedwhite"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More"
-                    android:textColor="@color/black"
-                    android:padding="5dp"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="3dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:src="@drawable/fowardarrow"/>
-            </LinearLayout>
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="400sp"
             android:id="@+id/recyclerView"
             />
-
-
-
-
-
     </LinearLayout>
 
 </RelativeLayout>

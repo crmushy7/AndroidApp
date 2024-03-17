@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_server"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/roundedwhitewithoutborder"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/topviewed"
+        android:textSize="16dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="AMOUNT TO PAY:"/>
+
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/edMessage"
+        android:backgroundTint="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topviewed"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:inputType="number"
+        android:hint="Enter amount" />
+
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/proceedbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:background="@drawable/button1"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/edMessage"
+        android:layout_marginTop="15dp"
+        android:text="Proceed"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

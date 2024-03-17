@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
+    Handler handler;
     EditText pswd, cpswd;
+    ProgressDialog progressDialog;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         firebaseDatabase=FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference();
         firebaseAuth=FirebaseAuth.getInstance();
+        handler=new Handler(Looper.getMainLooper());
 
         loginpage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,11 +97,19 @@ public class MainActivity extends AppCompatActivity {
                     passlog.setError("fill password");
                 }
                 else{
+
+                    handler.post(() -> {
+                        progressDialog = new ProgressDialog(MainActivity.this);
+                        progressDialog.setMessage("Please wait...");
+                        progressDialog.setCancelable(false);
+                        progressDialog.show();
+                    });
                     firebaseAuth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()){
+                                        progressDialog.dismiss();
                                         emaillog.setText("");
                                         passlog.setText("");
                                         Toast.makeText(MainActivity.this, "Successfull", Toast.LENGTH_SHORT).show();
@@ -103,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         finish();
                                     }else{
+                                        progressDialog.dismiss();
                                         Toast.makeText(MainActivity.this, "Failed to log in", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -122,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onUserRegister(){
+
         DatabaseSupport databaseSupport = new DatabaseSupport(this,"msomali.db");
 
         if (fullName.getText().equals("")||emailreg.getText().equals("")||phone.getText().equals("")||pswd.getText().equals("")||cpswd.getText().equals("")){
@@ -136,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if(pswd.getText().toString().trim().equals(cpswd.getText().toString().trim())){
                     boolean addUser = databaseSupport.addUser(userRecords);
+                    HashMap <String,Object> hashMap=new HashMap<>();
                     String email=emailreg.getText().toString().trim();
-                    HashMap<String,Object> hashMap=new HashMap<>();
                     hashMap.put("Fullname",fullName.getText().toString().trim());
                     hashMap.put("username",email);
                     hashMap.put("PhoneNumber",phone.getText().toString().trim());
@@ -149,11 +165,18 @@ public class MainActivity extends AppCompatActivity {
                         emailreg.setError("Invalid email");
 //                    Toast.makeText(this, "Invalid email address format", Toast.LENGTH_SHORT).show();
                     }else{
+                        handler.post(() -> {
+                            progressDialog = new ProgressDialog(MainActivity.this);
+                            progressDialog.setMessage("Please wait...");
+                            progressDialog.setCancelable(false);
+                            progressDialog.show();
+                        });
                         firebaseAuth.createUserWithEmailAndPassword(email, pswd.getText().toString())
                                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
+                                            progressDialog.dismiss();
 
 
                                             Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
@@ -182,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
                                                 registratinlay.setVisibility(View.GONE);
                                                 loginlay.setVisibility(View.VISIBLE);
                                             } else {
+                                                progressDialog.dismiss();
                                                 Toast.makeText(MainActivity.this, "Fail! User not registered!", Toast.LENGTH_LONG).show();
                                             }
                                         } else {

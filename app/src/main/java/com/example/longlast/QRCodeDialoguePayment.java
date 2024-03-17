@@ -39,7 +39,7 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 
-public class QRCodeDialogue {
+public class QRCodeDialoguePayment {
 
 
     UserRecords userRecords;
@@ -50,8 +50,8 @@ public class QRCodeDialogue {
     }
 
 
-    public static void show(final Context context,UserRecords userRecords) {
-         AlertDialog dialog;
+    public static void show(final Context context,UserRecords userRecords, String transactionId) {
+        AlertDialog dialog;
 //        final Dialog dialog = new Dialog(context);
 //        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        dialog.setCancelable(false);
@@ -94,7 +94,7 @@ public class QRCodeDialogue {
 //        userRecords =view.databaseSupport.getUser();
         username.setText(userRecords.getFullName());
         phonenumber.setText(userRecords.getMobileNumber());
-        kiasi.setText(Homepage.amountToSend+" Tsh");
+        kiasi.setText(Homepage.amounttopay+" Tsh");
         useremail.setText(userRecords.getEmail());
 
 
@@ -180,7 +180,7 @@ public class QRCodeDialogue {
 
         if (wifiManager != null && wifiManager.isWifiEnabled()) {
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-             int ipAddress = wifiInfo.getIpAddress();
+            int ipAddress = wifiInfo.getIpAddress();
             return formatIPAddress(ipAddress);
         } else {
             return getHotspotIPAddress();
